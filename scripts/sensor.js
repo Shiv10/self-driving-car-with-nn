@@ -6,10 +6,33 @@ class Sensor{
         this.raySpread = Math.PI/2;
 
         this.rays = [];
+        this.readings = [];
     }
     
-    update() {
+    update(roadBorders) {
         this.#castRays();
+        this.readings = [];
+        this.rays.forEach(ray => {
+            this.readings.push(this.#getReading(ray, roadBorders));
+        })
+    }
+
+    #getReading(ray, roadBorders) {
+        const touches = [];
+        roadBorders.forEach(border => {
+            const touch = getIntersection(ray[0], ray[1], border[0], border[1]);
+            if (touch) {
+                touches.push(touch);
+            }
+        });
+
+        if (touches.length == 0) {
+            return null;
+        } else {
+            const offsets = touches.map(e => e.offset);
+            const minOffset = Math.min(...offsets);
+            return touches.find(e => e.offset == minOffset);
+        }
     }
 
     #castRays() {
@@ -28,13 +51,28 @@ class Sensor{
 
 
     draw() {
+        let i = 0;
         this.rays.forEach(ray => {
+            let end = ray[1];
+            if (this.readings[i]){
+                end = this.readings[i]
+            }
             ctx.beginPath();
             ctx.lineWidth = 2;
             ctx.strokeStyle = "yellow";
             ctx.moveTo(ray[0].x, ray[0].y);
-            ctx.lineTo(ray[1].x, ray[1].y);
+            ctx.lineTo(end.x, end.y);
             ctx.stroke();
+
+
+            ctx.beginPath();
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = "black";
+            ctx.moveTo(ray[1].x, ray[1].y);
+            ctx.lineTo(end.x, end.y);
+            ctx.stroke();
+
+            i++;
         });
     }
 }
