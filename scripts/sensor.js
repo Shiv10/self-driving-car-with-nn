@@ -67,20 +67,20 @@ class Sensor{
             if (this.readings[i]){
                 end = this.readings[i]
             }
-            ctx.beginPath();
-            ctx.lineWidth = 2;
-            ctx.strokeStyle = "yellow";
-            ctx.moveTo(ray[0].x, ray[0].y);
-            ctx.lineTo(end.x, end.y);
-            ctx.stroke();
+            carCTX.beginPath();
+            carCTX.lineWidth = 2;
+            carCTX.strokeStyle = "yellow";
+            carCTX.moveTo(ray[0].x, ray[0].y);
+            carCTX.lineTo(end.x, end.y);
+            carCTX.stroke();
 
 
-            ctx.beginPath();
-            ctx.lineWidth = 2;
-            ctx.strokeStyle = "black";
-            ctx.moveTo(ray[1].x, ray[1].y);
-            ctx.lineTo(end.x, end.y);
-            ctx.stroke();
+            carCTX.beginPath();
+            carCTX.lineWidth = 2;
+            carCTX.strokeStyle = "black";
+            carCTX.moveTo(ray[1].x, ray[1].y);
+            carCTX.lineTo(end.x, end.y);
+            carCTX.stroke();
 
             i++;
         });

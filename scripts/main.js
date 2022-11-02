@@ -1,9 +1,14 @@
-const canvas = document.getElementById('myCanvas');
-canvas.width = 200;
+const carCanvas = document.getElementById('carCanvas');
+carCanvas.width = 200;
 
-const ctx = canvas.getContext('2d');
-const road = new Road(canvas.width/2, canvas.width*0.9);
-const car = new Car(road.getLaneCenter(1), 100, 30, 50, "KEYS");
+const networkCanvas = document.getElementById('networkCanvas');
+networkCanvas.width = 300;
+
+const carCTX = carCanvas.getContext('2d');
+const networkCTX = networkCanvas.getContext('2d');
+
+const road = new Road(carCanvas.width/2, carCanvas.width*0.9);
+const car = new Car(road.getLaneCenter(1), 100, 30, 50, "AI");
 const traffic = [
     new Car(road.getLaneCenter(1), -100, 30, 50, "DUMMY", 2)
 ]
@@ -13,18 +18,22 @@ const animate = () => {
         npcCar.update(road.borders,  []);
     })
     car.update(road.borders, traffic);
-    canvas.height = window.innerHeight;
-    
-    ctx.save()
-    ctx.translate(0, -car.y+canvas.height*0.7);
+    carCanvas.height = window.innerHeight;
+    networkCanvas.height = window.innerHeight;
 
-    road.draw(ctx);
-    traffic.forEach(npcCar => {
-        npcCar.draw(ctx, "red");
-    })
-    car.draw(ctx, "blue");
     
-    ctx.restore();
+    carCTX.save()
+    carCTX.translate(0, -car.y+carCanvas.height*0.7);
+
+    road.draw(carCTX);
+    traffic.forEach(npcCar => {
+        npcCar.draw(carCTX, "red");
+    })
+    car.draw(carCTX, "blue");
+    
+    carCTX.restore();
+
+    Visualizer.drawNetwork(networkCTX, car.brain);
     requestAnimationFrame(animate);
 }
 

@@ -7,6 +7,7 @@ class Car{
         this.height = height;
         
         this.damaged = false;
+        this.userBrain = controlType=="AI";
         this.speed = 0;
         this.acceleration = 0.2;
         this.maxSpeed = maxSpeed;
@@ -34,7 +35,13 @@ class Car{
             this.sensor.update(roadBorders, traffic);
             const offsets = this.sensor.readings.map(s => s==null?0:1-s.offset);
             const outputs = NeuralNetwork.feedForward(offsets, this.brain);
-            console.log(outputs);
+            // console.log(outputs);
+            if (this.userBrain) {
+                this.controls.forward = outputs[0];
+                this.controls.left = outputs[1];
+                this.controls.right = outputs[2];
+                this.controls.reverse = outputs[3];
+            }
         }
     }
 
