@@ -22,6 +22,8 @@ class Car{
             );
         }
         this.controls = new Controls(controlType);
+        this.image = new Image();
+        this.image.src = './assets/car.png';
 
     }
 
@@ -132,18 +134,12 @@ class Car{
 
     draw(ctx, color, showSensors=false) {
         
-        if (this.damaged) {
-            ctx.fillStyle = "gray";
-        } else{
-            ctx.fillStyle = color;
-        }
-        ctx.beginPath();
-        ctx.moveTo(this.polygon[0].x, this.polygon[0].y);
-        for (let i =1; i<this.polygon.length; i++) {
-            ctx.lineTo(this.polygon[i].x, this.polygon[i].y);
-        }
+        ctx.save();
+        ctx.translate(this.x, this.y);
+        ctx.rotate(-this.angle);
+        ctx.drawImage(this.image, -this.width/2, -this.height/2, this.width, this.height);
+        ctx.restore();
 
-        ctx.fill();
         if (this.sensor && showSensors) {
             this.sensor.draw();
         }
