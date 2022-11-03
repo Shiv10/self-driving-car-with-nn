@@ -1,5 +1,5 @@
 class Car{
-    constructor(x, y, width, height, controlType, maxSpeed=3){
+    constructor(x, y, width, height, controlType, maxSpeed=3, color="blue"){
         
         this.x = x;
         this.y = y;
@@ -22,8 +22,22 @@ class Car{
             );
         }
         this.controls = new Controls(controlType);
-        this.image = new Image();
-        this.image.src = './assets/car.png';
+        this.img=new Image();
+        this.img.src='./assets/car.png'
+
+        this.mask=document.createElement("canvas");
+        this.mask.width=width;
+        this.mask.height=height;
+
+        const maskCtx=this.mask.getContext("2d");
+        this.img.onload=()=>{
+            maskCtx.fillStyle=color;
+            maskCtx.rect(0,0,this.width,this.height);
+            maskCtx.fill();
+
+            maskCtx.globalCompositeOperation="destination-atop";
+            maskCtx.drawImage(this.img,0,0,this.width,this.height);
+        }
 
     }
 
@@ -133,15 +147,21 @@ class Car{
     }
 
     draw(ctx, color, showSensors=false) {
+        if (this.sensor && showSensors) {
+            this.sensor.draw();
+        }
         
         ctx.save();
         ctx.translate(this.x, this.y);
         ctx.rotate(-this.angle);
-        ctx.drawImage(this.image, -this.width/2, -this.height/2, this.width, this.height);
+        if (!this.damaged) {
+            ctx.drawImage(this.mask, -this.width/2, -this.height/2, this.width, this.height);
+            ctx.globalCompositeOperation = 'multiply';
+        }
+        ctx.drawImage(this.img, -this.width/2, -this.height/2, this.width, this.height);
+
         ctx.restore();
 
-        if (this.sensor && showSensors) {
-            this.sensor.draw();
-        }
+        
     }
 }
