@@ -18,7 +18,9 @@ const generateCars = (n) => {
 const road = new Road(carCanvas.width/2, carCanvas.width*0.9);
 const cars = generateCars(100);
 const traffic = [
-    new Car(road.getLaneCenter(1), -100, 30, 50, "DUMMY", 2)
+    new Car(road.getLaneCenter(1), -100, 30, 50, "DUMMY", 2),
+    new Car(road.getLaneCenter(0), -300, 30, 50, "DUMMY", 2),
+    new Car(road.getLaneCenter(2), -300, 30, 50, "DUMMY", 2),
 ]
 
 let bestCar = cars[0];
